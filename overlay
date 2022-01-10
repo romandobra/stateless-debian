@@ -1,0 +1,58 @@
+#!/bin/sh
+
+PREREQ=""
+
+prereqs()
+{
+  echo "${PREREQ}"
+}
+
+case ${1} in
+  prereqs)
+    prereqs
+    exit 0
+    ;;
+esac
+
+. /scripts/functions
+. /root/etc/overlay || true
+
+overmount(){
+  mkdir -p ${1}/lower ${1}/upper ${1}/work
+  umount ${ROOT}
+  mount ${ROOT} ${1}/lower || panic
+  mount -t overlay overlay -o noatime,lowerdir=${1}/lower,upperdir=${1}/upper,workdir=${1}/work /root || panic
+}
+
+if [[ "x$OVERLAY_MODE" == "x" ]]; then
+  echo -n "Enter overlay mode [none|ram|toram|*] (ram): "
+  read OVERLAY_MODE </dev/console>/dev/console
+fi
+
+OVERLAY_MODE=${OVERLAY_MODE:-ram}
+echo "OVERLAY_MODE='$OVERLAY_MODE'"
+
+case ${OVERLAY_MODE} in
+  none)
+    echo "No overlay. Mounting /root as usual..."
+    ;;
+  toram)
+    echo "No overlay. Copying /root to RAM..."
+    mkdir /run/toram
+    mount -t tmpfs tmpfs /run/toram
+    cp -r -p /root/. /run/toram/
+    echo "Mounting..."
+    umount /root
+    mount /run/toram /root
+    ;;
+  ram)
+    echo "Mounting /root in memory..."
+    mkdir /run/overlay
+    mount -t tmpfs tmpfs /run/overlay
+    overmount "/run/overlay"
+    echo "Mounted, booting..."
+    ;;
+  *)
+    panic
+    ;;
+esac
