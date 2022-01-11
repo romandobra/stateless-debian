@@ -10,7 +10,7 @@ This script then checks if your system has a file named `/etc/overlay` and sourc
 
 Possible settings:
 * `none` - This way your system will boot as usual.
-* `ram` - Your hard drive will be mounted at the `/run/overlay` point, and on top of that there will be RAM overlayfs mount. This means that all your changes to the system partition (e.g. new apt installs, settings etc) for this boot will be stored in RAM. After you reboot your system, it will have the same state as before. This applies only for your system partition.
+* `ram` - Your hard drive will be mounted at the `/run/overlay` point, and on top of that there will be RAM [overlayfs](https://en.wikipedia.org/wiki/OverlayFS) mount. This means that all your changes to the system partition (e.g. new apt installs, settings etc) for this boot will be stored in RAM. After you reboot your system, it will have the same state as before. This applies only for your system partition.
 * `toram` - Your system partition's content will be copied to RAM and system will boot from there (you need your RAM to be more than twice bigger than the system you are going to boot, means if you have 500Mb of your boot partition content, then your RAM should be bigger than 1Gb).
 * `(anything else)` - Drop to initramfs shell.
 
