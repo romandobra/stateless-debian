@@ -25,4 +25,5 @@ The `install.sh` script will do the following:
 * Update initramfs
 * Make a new file `/etc/overlay` with this content: `#OVERLAY_MODE=ram`
 
-## Enjoy and be free to ask questions in the Issues tab!
+## Enjoy!
+And be free to ask questions in the Issues tab.
