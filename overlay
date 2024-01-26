@@ -19,9 +19,9 @@ esac
 
 overmount(){
   mkdir -p ${1}/lower ${1}/upper ${1}/work
-  umount ${ROOT}
+  umount ${rootmnt}
   mount ${ROOT} ${1}/lower || panic
-  mount -t overlay overlay -o noatime,lowerdir=${1}/lower,upperdir=${1}/upper,workdir=${1}/work /root || panic
+  mount -t overlay overlay -o noatime,lowerdir=${1}/lower,upperdir=${1}/upper,workdir=${1}/work ${rootmnt} || panic
 }
 
 if [[ "x$OVERLAY_MODE" == "x" ]]; then
